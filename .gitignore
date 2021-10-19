@@ -1,0 +1,13 @@
+node_modules
+*.env
+!.env_file
+package-lock.json
+
+temp/*
+!temp/.gitkeep
+!temp/avatars
+
+/.vscode/*
+!/.vscode/launch.json
+!/.vscode/settings.json
+/.VSCodeCounter

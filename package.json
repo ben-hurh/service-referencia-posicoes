@@ -1,0 +1,29 @@
+{
+  "name": "position-reference-search-service",
+  "version": "1.0.0",
+  "description": "API Position reference search service.",
+  "main": "server.js",
+  "scripts": {
+    "start": "npx pm2-runtime server.js --watch",
+    "dev": "npx nodemon --inspect --ext js,json,env server.js"
+  },
+  "keywords": [],
+  "author": "A52 Softwares Inteligentes",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "bcryptjs": "^2",
+    "body-parser": "^1.19",
+    "core-js": "^3.6.5",
+    "cors": "^2.8",
+    "date-fns": "^2",
+    "express": "^4.17",
+    "express-async-errors": "^3.1.1",
+    "knex": "^0.21",
+    "mysql": "^2.18",
+    "nodemon": "^2.0",
+    "pg": "^8.5.1",
+    "pm2": "^4.5",
+    "uuid": "^8.3"
+  }
+}
