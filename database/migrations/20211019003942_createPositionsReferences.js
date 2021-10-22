@@ -7,6 +7,7 @@ exports.up = function(knex) {
 		table.string('name', 300);
     table.float('latitude',8,6);
     table.float('longitude',8,6);
+		table.string('uf', 300);
     table.integer('id_customer');
 		table.timestamp('created_at', { useTz: true })
 			.defaultTo(knex.fn.now());
