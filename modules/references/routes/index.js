@@ -17,12 +17,17 @@ routes.post('/', async (req, resp) => {
     resp.status(200).json(await controller.insert(req));
 });
 
+routes.post('/find', async (req, resp) => {
+    const controller = new Controller();
+    resp.status(200).json(await controller.find(req));
+});
+
 routes.put('/', async (req, resp) => {
     const controller = new Controller();
     resp.status(200).json(await controller.update(req));
 });
 
-routes.delete('/', async (req, resp) => {
+routes.delete('/:id', async (req, resp) => {
     const controller = new Controller();
     resp.status(200).json(await controller.delete(req));
 });

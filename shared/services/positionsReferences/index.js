@@ -22,11 +22,12 @@ class PositionsReferencesService {
 	}
 
 	async show(payload){
+		const {id, active} = payload;
 		let result = {}
 		await knex.table(this.TABLE_NAME)
 			.where({
-					active: true,
-					id: payload.id,
+					id,
+					active,
 			})
 			.first(this.return_fields)
 			.then(resp => { result = resp })
@@ -35,12 +36,10 @@ class PositionsReferencesService {
 	}
 
 	async insert(payload) {
+		const { id, id_local, name, latitude, longitude, uf, id_customer, active } = payload
 		let result = {}
 		await knex.table(this.TABLE_NAME)
-			.insert({
-				name: payload.name,
-				active: payload.active
-			})
+			.insert({ id, id_local, name, latitude, longitude, uf, id_customer, active})
 			.returning(this.return_fields)
 			.then(resp => { result = resp[0] })
 			.catch(err => {throw new AppError(err)})
@@ -62,11 +61,27 @@ class PositionsReferencesService {
 	}
 
 	async delete(payload) {
+		const { id } = payload;
 		let result = {}
 		await knex.table(this.TABLE_NAME)
-			.where({id: payload})
-			.update({active: false})
+			.where({id})
+			.update(payload)
 			.returning('id')
+			.then(resp => { result = resp })
+			.catch(err => {throw new AppError(err)})
+		return result;
+	}
+
+	async find(payload){
+		const { latitude, longitude, id_customer } = payload;
+		let result = {}
+		await knex.row(`select "name" 
+												 , uf
+												 , (SQRT(((latitude - (${latitude})) * (latitude - (${latitude}))) + ((longitude - (${longitude}))* (longitude - (${longitude}))))*111) as Calculo
+										  from positions_references 
+										 where id_customer = ${id_customer}
+										   and (SQRT(((latitude - (${latitude})) * (latitude - (${latitude}))) + ((longitude - (${longitude}))* (longitude - (${longitude}))))*111) <= 100
+										 order by Calculo asc limit 1;`)
 			.then(resp => { result = resp })
 			.catch(err => {throw new AppError(err)})
 		return result;
