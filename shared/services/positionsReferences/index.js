@@ -81,9 +81,7 @@ class PositionsReferencesService {
 				'uf',
 				knex.raw(`(SQRT(((latitude - (${latitude})) * (latitude - (${latitude}))) + ((longitude - (${longitude}))* (longitude - (${longitude}))))*111) as calculo`)
 			])
-			.where({
-				id_customer: id_customer
-			})
+			.whereIn('id_customer', [id_customer || 0, 0])
 			.orderBy('calculo')
 			.limit(1)
 			.then(resp => { result = resp })
