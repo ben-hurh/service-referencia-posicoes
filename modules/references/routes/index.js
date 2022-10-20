@@ -17,6 +17,11 @@ routes.get('/:id', async (req, resp) => {
     resp.status(200).json(await controller.show(req));
 });
 
+routes.post('/find', async (req, resp) => {
+    const controller = new Controller();
+    resp.status(200).json(await controller.find(req));
+});
+
 routes.post('/', async (req, resp) => {
     const controller = new Controller();
     resp.status(200).json(await controller.insert(req));
