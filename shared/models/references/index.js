@@ -1,5 +1,5 @@
-class References{
-  constructor (){
+class References {
+  constructor() {
     this.id = null
     this.id_local = null
     this.name = null
@@ -10,6 +10,7 @@ class References{
     this.created_at = null
     this.updated_at = null
     this.active = null
+    this.city = null
   }
 }
 

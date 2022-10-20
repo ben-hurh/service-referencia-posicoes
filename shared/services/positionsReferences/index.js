@@ -36,10 +36,10 @@ class PositionsReferencesService {
 	}
 
 	async insert(payload) {
-		const { id, id_local, name, latitude, longitude, uf, id_customer, active } = payload
+		const { id, id_local, name, latitude, longitude, uf, id_customer, active, city } = payload
 		let result = {}
 		await knex.table(this.TABLE_NAME)
-			.insert({ id, id_local, name, latitude, longitude, uf, id_customer, active })
+			.insert({ id, id_local, name, latitude, longitude, uf, id_customer, active, city })
 			.returning(this.return_fields)
 			.then(resp => { result = resp[0] })
 			.catch(err => { throw new AppError(err) })
@@ -79,6 +79,7 @@ class PositionsReferencesService {
 			.select([
 				'name',
 				'uf',
+				'city',
 				knex.raw(`(SQRT(((latitude - (${latitude})) * (latitude - (${latitude}))) + ((longitude - (${longitude}))* (longitude - (${longitude}))))*111) as calculo`)
 			])
 			.whereIn('id_customer', [id_customer || 0, 0])
