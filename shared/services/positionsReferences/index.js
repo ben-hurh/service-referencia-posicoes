@@ -21,7 +21,6 @@ class PositionsReferencesService {
 		return result;
 	}
 
-<<<<<<< HEAD
 	async show(payload) {
 		const { id, active } = payload;
 		let result = {}
@@ -29,15 +28,6 @@ class PositionsReferencesService {
 			.where({
 				id,
 				active,
-=======
-	async show(payload){
-		const {id, active} = payload;
-		let result = {}
-		await knex.table(this.TABLE_NAME)
-			.where({
-					id,
-					active,
->>>>>>> upstream/master
 			})
 			.first(this.return_fields)
 			.then(resp => { result = resp })
@@ -46,17 +36,10 @@ class PositionsReferencesService {
 	}
 
 	async insert(payload) {
-<<<<<<< HEAD
 		const { id, id_local, name, latitude, longitude, uf, id_customer, active, city } = payload
 		let result = {}
 		await knex.table(this.TABLE_NAME)
 			.insert({ id, id_local, name, latitude, longitude, uf, id_customer, active, city })
-=======
-		const { id, id_local, name, latitude, longitude, uf, id_customer, active } = payload
-		let result = {}
-		await knex.table(this.TABLE_NAME)
-			.insert({ id, id_local, name, latitude, longitude, uf, id_customer, active})
->>>>>>> upstream/master
 			.returning(this.return_fields)
 			.then(resp => { result = resp[0] })
 			.catch(err => { throw new AppError(err) })
@@ -81,11 +64,7 @@ class PositionsReferencesService {
 		const { id } = payload;
 		let result = {}
 		await knex.table(this.TABLE_NAME)
-<<<<<<< HEAD
 			.where({ id })
-=======
-			.where({id})
->>>>>>> upstream/master
 			.update(payload)
 			.returning('id')
 			.then(resp => { result = resp })
@@ -111,12 +90,12 @@ class PositionsReferencesService {
 		return result;
 	}
 
-	async find(payload){
+	async find(payload) {
 		const { latitude, longitude, id_customer } = payload;
 		let result = {}
 		await knex.table(this.TABLE_NAME)
 			.select([
-				'name', 
+				'name',
 				'uf',
 				knex.raw(`(SQRT(((latitude - (${latitude})) * (latitude - (${latitude}))) + ((longitude - (${longitude}))* (longitude - (${longitude}))))*111) as calculo`)
 			])
@@ -124,7 +103,7 @@ class PositionsReferencesService {
 			.orderBy('calculo')
 			.limit(1)
 			.then(resp => { result = resp })
-			.catch(err => {throw new AppError(err)})
+			.catch(err => { throw new AppError(err) })
 		return result;
 	}
 }
