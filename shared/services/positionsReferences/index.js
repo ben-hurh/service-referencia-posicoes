@@ -89,23 +89,6 @@ class PositionsReferencesService {
 			.catch(err => { throw new AppError(err) })
 		return result;
 	}
-
-	async find(payload) {
-		const { latitude, longitude, id_customer } = payload;
-		let result = {}
-		await knex.table(this.TABLE_NAME)
-			.select([
-				'name',
-				'uf',
-				knex.raw(`(SQRT(((latitude - (${latitude})) * (latitude - (${latitude}))) + ((longitude - (${longitude}))* (longitude - (${longitude}))))*111) as calculo`)
-			])
-			.whereIn('id_customer', [id_customer || 0, 0])
-			.orderBy('calculo')
-			.limit(1)
-			.then(resp => { result = resp })
-			.catch(err => { throw new AppError(err) })
-		return result;
-	}
 }
 
 module.exports = PositionsReferencesService;
