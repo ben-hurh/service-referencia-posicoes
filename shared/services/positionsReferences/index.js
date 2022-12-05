@@ -1,6 +1,6 @@
 const knex = require('../../../database/knex');
 const AppError = require('../../../errors/AppError');
-
+const redis = require('../../../database/redis');
 class PositionsReferencesService {
 	constructor() {
 		this.TABLE_NAME = 'positions_references'
@@ -74,19 +74,49 @@ class PositionsReferencesService {
 
 	async find(payload) {
 		const { latitude, longitude, id_customer } = payload;
+		const box = 'locais:' + id_customer;
+		let cache = await redis.geosearch(
+			box,
+			'FROMLONLAT',
+			longitude,
+			latitude,
+			'BYRADIUS',
+			30,
+			'km',
+			'WITHDIST',
+			'ASC',
+			'COUNT',
+			1,
+		);
+		if (cache.length === 0) {
+			cache = await redis.geosearch(
+				'locais_0',
+				'FROMLONLAT',
+				longitude,
+				latitude,
+				'BYRADIUS',
+				30,
+				'km',
+				'WITHDIST',
+				'ASC',
+				'COUNT',
+				1,
+			);
+		}
 		let result = {}
 		await knex.table(this.TABLE_NAME)
 			.select([
 				'name',
 				'uf',
 				'city',
-				knex.raw(`(SQRT(((latitude - (${latitude})) * (latitude - (${latitude}))) + ((longitude - (${longitude}))* (longitude - (${longitude}))))*111) as calculo`)
 			])
 			.whereIn('id_customer', [id_customer || 0, 0])
-			.orderBy('calculo')
+			.where('id', cache[0][0])
 			.limit(1)
 			.then(resp => { result = resp })
-			.catch(err => { throw new AppError(err) })
+			.catch(err => { throw new AppError(err) });
+		result[0].calculo = parseFloat(cache[0][1]);
+
 		return result;
 	}
 }
