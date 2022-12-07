@@ -104,20 +104,24 @@ class PositionsReferencesService {
 			);
 		}
 		let result = {}
-		await knex.table(this.TABLE_NAME)
-			.select([
-				'name',
-				'uf',
-				'city',
-			])
-			.whereIn('id_customer', [id_customer || 0, 0])
-			.where('id', cache[0][0])
-			.limit(1)
-			.then(resp => { result = resp })
-			.catch(err => { throw new AppError(err) });
-		result[0].calculo = parseFloat(cache[0][1]);
+		if(cache != ""){
+			await knex.table(this.TABLE_NAME)
+				.select([
+					'name',
+					'uf',
+					'city',
+				])
+				.whereIn('id_customer', [id_customer || 0, 0])
+				.where('id', cache[0][0])
+				.limit(1)
+				.then(resp => { result = resp })
+				.catch(err => { throw new AppError(err) });
+			result[0].calculo = parseFloat(cache[0][1]);
 
-		return result;
+			return result;
+		}else{
+			return ""
+		}
 	}
 }
 
