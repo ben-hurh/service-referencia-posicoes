@@ -7,7 +7,7 @@ routes.get('/', async (req, resp) => {
     resp.status(200).json(await controller.all(req));
 });
 
-routes.post('/find', async (req, resp) => {
+routes.get('/find', async (req, resp) => {
     const controller = new Controller();
     resp.status(200).json(await controller.find(req));
 });
