@@ -10,7 +10,7 @@ requests.adapters.DEFAULT_RETRIES = 100
 
 def local_converter():
     endpoint = '/references'
-    list_locals = bd_mysql.buscar('select * from cidades_referencias_1')
+    list_locals = bd_mysql.buscar('select * from cidades_referencias_1 where active = 1')
     for row in track(list_locals.fetchall(), 'Locals Converter...'):
         json = {
             'id_local': row['cd_cidade'],
