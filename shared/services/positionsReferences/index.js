@@ -1,6 +1,8 @@
 const knex = require('../../../database/knex');
 const AppError = require('../../../errors/AppError');
 const redis = require('../../../database/redis');
+const { config } = require('../../../.env');
+
 class PositionsReferencesService {
 	constructor() {
 		this.TABLE_NAME = 'positions_references'
@@ -81,7 +83,7 @@ class PositionsReferencesService {
 			longitude,
 			latitude,
 			'BYRADIUS',
-			30,
+			config.positionFindRaioSearch,
 			'km',
 			'WITHDIST',
 			'ASC',
@@ -95,7 +97,7 @@ class PositionsReferencesService {
 				longitude,
 				latitude,
 				'BYRADIUS',
-				30,
+				config.positionFindRaioSearch,
 				'km',
 				'WITHDIST',
 				'ASC',
