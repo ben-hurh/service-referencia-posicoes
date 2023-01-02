@@ -92,12 +92,12 @@ class PositionsReferencesService {
 		);
 		if (cache.length === 0) {
 			cache = await redis.geosearch(
-				'locais_0',
+				'locais:0',
 				'FROMLONLAT',
 				longitude,
 				latitude,
 				'BYRADIUS',
-				config.positionFindRaioSearch,
+				config.positionFindRaioSearchLocais0,
 				'km',
 				'WITHDIST',
 				'ASC',
@@ -106,7 +106,7 @@ class PositionsReferencesService {
 			);
 		}
 		let result = {}
-		if(cache != ""){
+		if (cache != "") {
 			await knex.table(this.TABLE_NAME)
 				.select([
 					'name',
@@ -121,7 +121,7 @@ class PositionsReferencesService {
 			result[0].calculo = parseFloat(cache[0][1]);
 
 			return result;
-		}else{
+		} else {
 			return ""
 		}
 	}
